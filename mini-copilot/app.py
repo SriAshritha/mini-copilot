@@ -1,11 +1,9 @@
 import streamlit as st
 from openai import OpenAI
 
-# UI Setup
 st.set_page_config(page_title="Mini Copilot", layout="wide")
 st.title("🤖 Mini Copilot – Code & Doc Assistant")
 
-# Input from user
 task = st.selectbox("Choose a Task", [
     "Explain Code",
     "Add Comments to Code",
@@ -16,15 +14,13 @@ task = st.selectbox("Choose a Task", [
 
 user_input = st.text_area("Enter your code or question here", height=250)
 
-# Initialize OpenAI client
 api_key = st.secrets.get("OPENAI_API_KEY", None)
 if not api_key:
-    st.error("❌ OpenAI API key not found in secrets. Please add it to Streamlit secrets.")
+    st.error(" OpenAI API key not found in secrets. Please add it to Streamlit secrets.")
     st.stop()
 
 client = OpenAI(api_key=api_key)
 
-# Optional: Display if API key loaded (for debug only; remove in production)
 st.write("API Key Loaded:", bool(api_key))
 
 def check_model_availability(model_name):
@@ -36,13 +32,13 @@ def check_model_availability(model_name):
         st.error(f"Error fetching model list: {e}")
         return False
 
-selected_model = "gpt-3.5-turbo"  # safer default
+selected_model = "gpt-3.5-turbo" 
 
 if not check_model_availability(selected_model):
     st.warning(f"Model `{selected_model}` is not available with your API key. Please check your OpenAI account.")
     st.stop()
 
-# Generate output
+
 if st.button("Generate Response"):
     if not user_input.strip():
         st.warning("Please enter some code or a question.")
